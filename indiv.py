@@ -4,14 +4,14 @@ import math
 
 
 class Individual:
-    def __init__(self, x, y, GENES_LENGTH, ENTITY_COLOUR, SCREEN) -> None:
+    def __init__(self, x, y, GENES_LENGTH, ENTITY_COLOUR, SCREEN, genes=[]) -> None:
         self.x = x
         self.y = y
         self.size = 5
         self.GENES_LENGTH = GENES_LENGTH
         self.ENTITY_COLOUR = ENTITY_COLOUR
         self.SCREEN = SCREEN
-        self.genes = []
+        self.genes = genes
         self.index = 0
         self.velocity = 25
         self.done = False

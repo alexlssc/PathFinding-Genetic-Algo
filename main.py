@@ -8,9 +8,16 @@ ENTITY_COLOUR = [255, 90, 95]
 FPS = 10
 ENDPOINT = x, y = 400, 700
 NB_POP = 50
-NB_GEN = 1
+NB_GEN = 3
 
 GENE_LENGTH = 80
+
+
+def printText(text, font, location=(0, 0)):
+    text_surface = font.render(
+        text, True, (255, 255, 255))
+    SCREEN.blit(text_surface, dest=location)
+    pygame.draw.circle(SCREEN, ENTITY_COLOUR, ENDPOINT, 20)
 
 
 def main():
@@ -18,9 +25,9 @@ def main():
     pygame.init()
     pygame.font.init()
     pygame.display.set_caption("Path-Finding Genetic Algorithm")
+    font = pygame.font.Font(pygame.font.get_default_font(), 20)
     SCREEN = pygame.display.set_mode(SIZE)
     CLOCK = pygame.time.Clock()
-    font = pygame.font.Font(pygame.font.get_default_font(), 20)
     # Init population
     pop = [indi(400, 100, GENE_LENGTH, ENTITY_COLOUR, SCREEN)
            for _ in range(NB_POP)]
@@ -33,20 +40,20 @@ def main():
                 sys.exit()
         for gen in range(NB_GEN):
             allFitness = []
+            pop = [indi(400, 100, GENE_LENGTH, ENTITY_COLOUR, SCREEN)
+                   for _ in range(NB_POP)]
+            for indiv in pop:
+                indiv.setRandomGenes()
             for _ in range(GENE_LENGTH):
                 SCREEN.fill(BACKGROUND)
                 CLOCK.tick(FPS)
-                text_surface = font.render(
-                    f'Generation: {gen}', True, (255, 255, 255))
-                SCREEN.blit(text_surface, dest=(0, 0))
-                pygame.draw.circle(SCREEN, ENTITY_COLOUR, ENDPOINT, 20)
+                printText(f'Generation: {gen+1}', font, location=(0, 0))
                 for indiv in pop:
                     indiv.draw()
-                pygame.display.flip()
-            else:
-                for indiv in pop:
-                    allFitness.append(indiv.getFitness())
-                print(allFitness)
+                pygame.display.update()
+            for indiv in pop:
+                allFitness.append(indiv.getFitness())
+            print(allFitness)
         break
 
 

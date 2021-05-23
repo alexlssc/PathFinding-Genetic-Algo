@@ -10,11 +10,10 @@ SIZE = width, height = 800, 800
 BACKGROUND = [8, 126, 139]
 ENTITY_COLOUR = [255, 90, 95]
 FPS = 10
-ENDPOINT = pygame.Rect(400, 700, 30, 30)
-ENDPOINT.center = (400, 700)
+ENDPOINT = x, y = 400, 700
 NB_POP = 50
 
-GENE_LENGTH = 250
+GENE_LENGTH = 50
 
 
 def main():
@@ -22,10 +21,14 @@ def main():
     SCREEN = pygame.display.set_mode(SIZE)
     CLOCK = pygame.time.Clock()
 
+    # Init population
     pop = [indi(400, 100, GENE_LENGTH, ENTITY_COLOUR, SCREEN)
            for _ in range(NB_POP)]
     for indiv in pop:
         indiv.setRandomGenes()
+
+    allFitness = []
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -36,7 +39,11 @@ def main():
 
         for indiv in pop:
             indiv.draw()
-        pygame.draw.rect(SCREEN, ENTITY_COLOUR, ENDPOINT)
+
+        pygame.draw.circle(SCREEN, ENTITY_COLOUR, ENDPOINT, 20)
+        for indiv in pop:
+            indiv.setFitness(ENDPOINT)
+            print(indiv.getFitness())
         pygame.display.flip()
 
 

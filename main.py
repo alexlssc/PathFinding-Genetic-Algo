@@ -1,6 +1,5 @@
 import pygame
 import sys
-import pandas
 from indiv import Individual as indi
 
 pygame.init()
@@ -12,8 +11,9 @@ ENTITY_COLOUR = [255, 90, 95]
 FPS = 10
 ENDPOINT = x, y = 400, 700
 NB_POP = 50
+NB_GEN = 1
 
-GENE_LENGTH = 50
+GENE_LENGTH = 80
 
 
 def main():
@@ -34,21 +34,19 @@ def main():
             if event.type == pygame.QUIT:
                 sys.exit()
 
-        CLOCK.tick(FPS)
-        SCREEN.fill(BACKGROUND)
-
-        for indiv in pop:
-            indiv.draw()
-
-        pygame.draw.circle(SCREEN, ENTITY_COLOUR, ENDPOINT, 20)
-        for indiv in pop:
-            indiv.setFitness(ENDPOINT)
-            print(indiv.getFitness())
-        pygame.display.flip()
-
-
-def createGenes():
-    return [pygame.Vector2 for _ in range(GENE_LENGTH)]
+        for _ in range(NB_GEN):
+            for _ in range(GENE_LENGTH):
+                SCREEN.fill(BACKGROUND)
+                CLOCK.tick(FPS)
+                pygame.draw.circle(SCREEN, ENTITY_COLOUR, ENDPOINT, 20)
+                for indiv in pop:
+                    indiv.draw()
+                pygame.display.flip()
+        else:
+            for indiv in pop:
+                allFitness.append(indiv.getFitness())
+            print(allFitness)
+        break
 
 
 if __name__ == "__main__":

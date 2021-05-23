@@ -21,6 +21,7 @@ class Individual:
         try:
             self.x += self.velocity*self.genes[self.index].x
             self.y += self.velocity*self.genes[self.index].y
+            self.setFitness((400, 700))
         except:
             self.done = True
         self.index += 1
@@ -62,3 +63,6 @@ class Individual:
 
     def getGenes(self):
         return self.genes
+
+    def getDone(self):
+        return self.done

@@ -7,13 +7,13 @@ from indiv import Individual as indi
 SIZE = width, height = 800, 800
 BACKGROUND = [8, 126, 139]
 ENTITY_COLOUR = [255, 90, 95]
-FPS = 10
+FPS = 40
 ENDPOINT = x, y = 400, 700
-NB_POP = 50
-NB_GEN = 30
+NB_POP = 100
+NB_GEN = 50
 MUTATION_RATE = 0.02
 
-GENE_LENGTH = 80
+GENE_LENGTH = 250
 
 
 def printText(text, font, location=(0, 0)):
@@ -23,15 +23,20 @@ def printText(text, font, location=(0, 0)):
     pygame.draw.circle(SCREEN, ENTITY_COLOUR, ENDPOINT, 20)
 
 
-def proceedNaturalSelection(pop, best_fitness):
+def proceedNaturalSelection(pop, best_fitness, best_overall_fitness):
     matingPool = []
+    this_overall_fitness = 0
     for indiv in pop:
         n = math.floor(indiv.getFitness() * 100)
+        this_overall_fitness += n
         if n > best_fitness:
             best_fitness = n
         for _ in range(n):
             matingPool.append(indiv.getGenes())
-    return matingPool, best_fitness
+
+    if this_overall_fitness / len(pop) > best_overall_fitness:
+        best_overall_fitness = this_overall_fitness / len(pop)
+    return matingPool, best_fitness, best_overall_fitness
 
 
 def reproduce(matingPool):
@@ -79,6 +84,7 @@ def main():
     SCREEN = pygame.display.set_mode(SIZE)
     CLOCK = pygame.time.Clock()
     best_fitness = 0
+    best_overall_fitness = 0
     # Init population
     pop = [indi(400, 100, GENE_LENGTH, ENTITY_COLOUR, SCREEN)
            for _ in range(NB_POP)]
@@ -95,13 +101,15 @@ def main():
                 printText(f'Generation: {gen+1}', font, location=(0, 0))
                 printText(
                     f'Best Fitness: {best_fitness}', font, location=(0, 20))
+                printText(
+                    f'Best Overall Fitness: {best_overall_fitness}', font, location=(0, 40))
                 for indiv in pop:
                     indiv.draw()
                 CLOCK.tick(FPS)
                 pygame.display.flip()
 
-            matingPool, best_fitness = proceedNaturalSelection(
-                pop, best_fitness)
+            matingPool, best_fitness, best_overall_fitness = proceedNaturalSelection(
+                pop, best_fitness, best_overall_fitness)
             pop = reproduce(matingPool)
 
         break

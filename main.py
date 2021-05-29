@@ -17,6 +17,13 @@ GENE_LENGTH = 250
 
 
 def printText(text, font, location=(0, 0)):
+    """Print text onto the screen
+
+    Args:
+        text (String): Text displayed on screen
+        font (pygame.Font): Font used to display text
+        location (tuple, optional): x, y coordinates for text position. Defaults to (0, 0).
+    """
     text_surface = font.render(
         text, True, (255, 255, 255))
     SCREEN.blit(text_surface, dest=location)
@@ -24,6 +31,19 @@ def printText(text, font, location=(0, 0)):
 
 
 def proceedNaturalSelection(pop, best_fitness, best_overall_fitness):
+    """Create and return mating pool using just finished current generation.
+       Also working out best fitness value and overall best fitness value
+
+    Args:
+        pop ([Individual]): Population from the current generationddfjkf
+        best_fitness (Float): Best fitness value since the beginning of the simulatiom
+        best_overall_fitness (Float): Best overall fitness since the beginning of the simulation
+
+    Returns:
+        matingPool ([[pygame.Vector2]]) : Completed mating pool
+        best_fitness (Float) : Newly worked-out Best Fitness
+        best_overall_fitness (Float) : Newly worked-out Best Overall Fitness
+    """
     matingPool = []
     this_overall_fitness = 0
     for indiv in pop:
@@ -40,6 +60,14 @@ def proceedNaturalSelection(pop, best_fitness, best_overall_fitness):
 
 
 def reproduce(matingPool):
+    """ Return the next generation of population 
+
+    Args:
+        matingPool ([[pygame.Vector2]]) : Current generation matingPool
+
+    Returns:
+        nextGen ([Individual]) : List of individual for the next generation
+    """
     nextGen = []
     for _ in range(NB_POP):
         mumIndex = random.randrange(len(matingPool))
@@ -55,6 +83,15 @@ def reproduce(matingPool):
 
 
 def getChild(mum, dad):
+    """Create and return Child Individual object according to the mum and fathers' DNA
+
+    Args:
+        mum ([[pygame.Vector2]]): Mother's DNA picked from the mating pool
+        dad ([[pygame.Vector2]]): Father's DNA picked from the mating pool
+
+    Returns:
+        child (Individual) : Individual object created from mother and father's DNA
+    """
     childDna = []
     for i in range(len(mum)):
         if i % 2 == 0:
@@ -68,6 +105,14 @@ def getChild(mum, dad):
 
 
 def getMutation(dna):
+    """Introduce random mutation into the child's DNA
+
+    Args:
+        dna ([[pygame.Vector2]]): Child's DNA without mutation
+
+    Returns:
+        dna ([[pygame.Vector2]]): Child's DNA with potential mutation
+    """
     for idx, _ in enumerate(dna):
         if random.random() < MUTATION_RATE:
             dna[idx] = pygame.Vector2(

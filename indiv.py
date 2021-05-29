@@ -18,6 +18,8 @@ class Individual:
         self.fitness = 0
 
     def update(self):
+        """Update Individuals value per frame
+        """
         try:
             self.x += self.velocity*self.genes[self.index].x
             self.y += self.velocity*self.genes[self.index].y
@@ -28,18 +30,33 @@ class Individual:
         self.done = self.checkOutOfBounds()
 
     def checkOutOfBounds(self):
+        """Check if individual is within the screen's bounds
+
+        Returns:
+            Boolean : Boolean whether the individual is within the screen's bounds or not
+        """
         if self.x < 0 or self.x > self.SCREEN.get_width() or self.y < 0 or self.y > self.SCREEN.get_height():
             return True
 
         return False
 
     def draw(self):
+        """Draw Individual on the screen if Individual not done
+        """
         if self.done == False:
             self.update()
             pygame.draw.rect(self.SCREEN, self.ENTITY_COLOUR,
                              pygame.Rect(self.x, self.y, self.size, self.size))
 
     def calcFitness(self, endpoint):
+        """Workouts Individual's fitness score (Distance to EndPoint)
+
+        Args:
+            endpoint (float, float): x,y coordinates of the endpoint
+
+        Returns:
+            fitness_score (float): Fitness score of this individual
+        """
         distanceToEndpoint = self.calcDistance(endpoint)
         normalised = distanceToEndpoint / self.SCREEN.get_height()
         return 1 - normalised
@@ -51,6 +68,14 @@ class Individual:
         return self.fitness
 
     def calcDistance(self, endpoint):
+        """Works out distance between 2 points
+
+        Args:
+            endpoint (float, float): x,y coordinates of the endpoint
+
+        Returns:
+            distance (float): Distance between individual and endpoint
+        """
         endpoint_x, endpoint_y = endpoint
         return math.sqrt((self.x-endpoint_x)**2 + (self.y-endpoint_y)**2)
 
